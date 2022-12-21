@@ -1,0 +1,136 @@
+package ru.clevertec.knyazev.service;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import ru.clevertec.knyazev.dto.DiscountCardDTO;
+import ru.clevertec.knyazev.dto.ProductDTO;
+import ru.clevertec.knyazev.entity.Address;
+import ru.clevertec.knyazev.entity.Casher;
+import ru.clevertec.knyazev.entity.Product;
+import ru.clevertec.knyazev.entity.Shop;
+import ru.clevertec.knyazev.entity.Storage;
+import ru.clevertec.knyazev.entity.Storage.Unit;
+import ru.clevertec.knyazev.service.exception.ServiceException;
+import ru.clevertec.knyazev.view.Receipt;
+
+public class PurchaseServiceImplTests {
+	private StorageService storageServiceMock;
+	private CasherService casherServiceMock;
+	private ShopService shopServiceMock;
+
+	private PurchaseService purchaseService;
+
+	@BeforeEach
+	public void setUp() {
+		storageServiceMock = Mockito.mock(StorageService.class);
+		casherServiceMock = Mockito.mock(CasherService.class);
+		shopServiceMock = Mockito.mock(ShopService.class);
+
+		purchaseService = new PurchaseServiceImpl(storageServiceMock, casherServiceMock, shopServiceMock);
+	}
+
+	@Test
+	public void whenBuyPurchases() throws ServiceException {
+		final Long productId = 1L;
+		Product product1 = new Product(productId, "Рассыпчатая мука", false);
+
+		List<Storage> storages = new ArrayList<>() {
+			private static final long serialVersionUID = -2370284320759078343L;
+
+			{
+				add(new Storage(4L, product1, Unit.кг, new BigDecimal(2.79), new BigDecimal(4)));
+				add(new Storage(5L, product1, Unit.кг, new BigDecimal(5.69), new BigDecimal(125.658)));
+				add(new Storage(6L, product1, Unit.кг, new BigDecimal(2.82), new BigDecimal(16)));
+			}
+		};
+
+		BigDecimal totalPrice = storages.stream().map(storage -> storage.getQuantity().multiply(storage.getPrice()))
+				.reduce((a, b) -> a.add(b)).orElse(new BigDecimal(0));
+
+		Address address = new Address("212658", "Belarus", "Minsk", "Malaya str", "12");
+		Shop shop = new Shop("TestShop", address, "+375 29 689 23 56");
+
+		Casher casher = new Casher(1L);
+
+		Mockito.when(storageServiceMock.buyProductFromStorages(Mockito.longThat(l -> (l != null) && (l > 0L)),
+				Mockito.any(BigDecimal.class))).thenReturn(storages);
+		Mockito.when(casherServiceMock.showCasherId()).thenReturn(casher.getId());
+		Mockito.when(shopServiceMock.showShop()).thenReturn(shop);
+		Mockito.when(storageServiceMock.getBoughtProductsTotalPrice(Mockito.anyMap())).thenReturn(totalPrice);
+
+		Map<ProductDTO, BigDecimal> purchase = new HashMap<>() {
+			private static final long serialVersionUID = 1L;
+
+			{
+				put(new ProductDTO(productId), new BigDecimal(125.38)); // < 145.658
+			}
+		};
+
+		Set<DiscountCardDTO> discountCardsDtO = new HashSet<>() {
+			private static final long serialVersionUID = 3625295981846758383L;
+
+			{
+				add(new DiscountCardDTO("15fd20186")); // 1%
+				add(new DiscountCardDTO("15fd20187")); // 3% => 4 % => 30.850968
+			}
+		};
+
+		Receipt receipt = purchaseService.buyPurchases(purchase, discountCardsDtO);
+
+		String discountExpected = String.format("%-8S %78.2f", "cards discount value:", 30.85).strip();
+		String realCardsDiscount = receipt.getDiscountCardsValue().strip();
+		
+		assertAll(() -> {
+			assertNotNull(receipt);
+			assertNotNull(receipt.getCasherIdWithDateTime());
+			assertNotNull(receipt.getShop());
+			assertEquals(discountExpected, realCardsDiscount);
+		});
+	}
+	
+	@Test
+	public void whenGetPurchasesOnNullProductDTO() {
+		Map<ProductDTO, BigDecimal> productsDTO = null;
+		
+			Set<DiscountCardDTO> discountCardsDtO = new HashSet<>() {
+			private static final long serialVersionUID = 362526598184918383L;
+
+			{
+				add(new DiscountCardDTO("15fd20187"));
+			}
+		};
+		
+		assertThrows(ServiceException.class, () -> purchaseService.buyPurchases(productsDTO, discountCardsDtO), "ServiceException expected when null productDTO was given.");
+	}
+	
+	@Test
+	public void whenGetPurchasesOnEmptyProductDTO() {
+		Map<ProductDTO, BigDecimal> productsDTO = new HashMap<>();
+		
+			Set<DiscountCardDTO> discountCardsDtO = new HashSet<>() {
+			private static final long serialVersionUID = 362526598184918383L;
+
+			{
+				add(new DiscountCardDTO("15fd20187"));
+			}
+		};
+		
+		assertThrows(ServiceException.class, () -> purchaseService.buyPurchases(productsDTO, discountCardsDtO), "ServiceException expected when null productDTO was given.");
+	}
+	
+}
