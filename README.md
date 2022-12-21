@@ -68,7 +68,8 @@ Builder (при создании квитанции), Decorator (при чтен
 <li>Для запуска в режиме чтения из файлов и вывода в файл:</li>
 	<ol>
 		<li>В файле build.gradle поменять настройку манифеста для jar c 'Main-Class': 'ru.clevertec.knyazev.CheckStandardRunner'
-		на 'Main-Class': 'ru.clevertec.knyazev.CheckFileRunner'</li>		
+		на 'Main-Class': 'ru.clevertec.knyazev.CheckFileRunner'</li>
+		<li>Пересобрать: gradlew clean ; gradlew build</li>
 		<li>Пройти в: cd build/libs</li>
 		<li>Запустить из командной строки: java -jar clevertec-0.1.0.jar 1.txt 2.txt</li>
 		<li>При этом чтение будет осуществляться из файлов 1.txt 2.txt, расположенных в /src/main/resources в пакете ru.clevertec.knyazev</li>
