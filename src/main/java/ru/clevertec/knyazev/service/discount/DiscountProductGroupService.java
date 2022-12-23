@@ -26,7 +26,7 @@ class DiscountProductGroupService extends AbstractDiscountService<Storage, BigDe
 		
 		if ((realProductGroupQuantity.compareTo(Settings.PRODUCT_QUANTITY_FOR_DISCOUNT) == 0) || (realProductGroupQuantity.compareTo(Settings.PRODUCT_QUANTITY_FOR_DISCOUNT) == 1)) {
 			for (Storage storage : storeagesGroupProduct) {
-				discountSumValue = discountSumValue.add(storage.getPrice().divide(new BigDecimal(Settings.DISCOUNT_VALUE_PERCENT_FOR_PRODUCT_GROUP)));
+				discountSumValue = discountSumValue.add(storage.getPrice().multiply(storage.getQuantity()).multiply(new BigDecimal(Settings.DISCOUNT_VALUE_PERCENT_FOR_PRODUCT_GROUP)).divide(new BigDecimal(100)));
 			}
 		}
 		

@@ -1,8 +1,5 @@
 package ru.clevertec.knyazev.service.discount;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
@@ -27,7 +24,7 @@ import ru.clevertec.knyazev.entity.Storage.Unit;
 public class DiscountCardServiceTests {
 	private DiscountCardDAO discountCardDAOMock;
 
-	private DiscountCardService discountCardService;
+	private DiscountService<DiscountCardDTO, Integer> discountCardService;
 
 	private Set<DiscountCardDTO> discountCardsDTO;
 
@@ -48,90 +45,6 @@ public class DiscountCardServiceTests {
 		discountCardService = new DiscountCardService(discountCardDAOMock, discountCardsDTO);
 	}
 
-	@Test
-	public void whenCalculateDiscount() {
-
-		Set<DiscountCard> discountCards = new HashSet<>() {
-			private static final long serialVersionUID = 5454512L;
-
-			{
-				add(new DiscountCard(1L, "12F589655", 3));
-				add(new DiscountCard(1L, "12F589656", 2));
-				add(new DiscountCard(1L, "12F589657", 1));
-			}
-		};
-
-		Mockito.when(discountCardDAOMock.isDiscountCardExists(Mockito.argThat(str -> str.length() == 9)))
-				.thenAnswer(invocation -> {
-					String discountCardNumber = invocation.getArgument(0, String.class);
-					for (DiscountCard discountCard : discountCards) {
-						if (discountCard.getNumber().equals(discountCardNumber)) {
-							return true;
-						}
-					}
-
-					return false;
-				});
-		Mockito.when(discountCardDAOMock.getDiscountCardByNumber(Mockito.argThat(str -> str.length() == 9)))
-				.then(invocation -> {
-					String discountCardNumber = invocation.getArgument(0, String.class);
-					for (DiscountCard discountCard : discountCards) {
-						if (discountCard.getNumber().equals(discountCardNumber)) {
-							return discountCard;
-						}
-					}
-
-					return null;
-				});
-
-		Integer discountCardValue = discountCardService.calculateDiscount(discountCardsDTO);
-
-		Integer discountCardValueExpected = 5;
-		assertAll(() -> {
-			assertNotNull(discountCardValue);
-			assertEquals(discountCardValueExpected, discountCardValue);
-		});
-	}
-
-	@Test
-	public void whenDivideOnGroup() {
-		Product product1 = new Product(1L,
-				"On this product must be applying only discount that depends on its quantity", true);
-		Product product2 = new Product(2L, "On this product must be applying discount card only", false);
-
-		List<Storage> discountCardProducts = new ArrayList<>() {
-			private static final long serialVersionUID = 1748625L;
-			{
-				add(new Storage(8L, product2, Unit.шт, new BigDecimal(6.3), new BigDecimal(8)));
-				add(new Storage(11L, product2, Unit.шт, new BigDecimal(4.32), new BigDecimal(6)));
-			}
-		};
-
-		List<Storage> discountproductGroup = new ArrayList<>() {
-			private static final long serialVersionUID = 185265L;
-
-			{
-				add(new Storage(8L, product1, Unit.ед, new BigDecimal(5.21), new BigDecimal(1)));
-				add(new Storage(11L, product1, Unit.ед, new BigDecimal(4.62), new BigDecimal(2)));
-			}
-		};
-
-		Map<Long, List<Storage>> boughtProductsInStorages = new HashMap<>() {
-			private static final long serialVersionUID = -1085315221959935342L;
-
-			{
-				put(product1.getId(), discountproductGroup);
-				put(product2.getId(), discountCardProducts);
-			}
-		};
-
-		Map<Long, List<Storage>> resultGroup = discountCardService.divideOnGroup(boughtProductsInStorages);
-
-		assertAll(() -> {
-			assertTrue(resultGroup.size() == 1);
-			assertTrue(resultGroup.values().stream().allMatch(storages -> storages.equals(discountCardProducts)));
-		});
-	}
 
 	@Test
 	public void whenApplyDiscount() {
@@ -204,5 +117,21 @@ public class DiscountCardServiceTests {
 		
 		assertTrue(totalDiscountCardsValue.compareTo(expectedDiscountCardsValue) == 0);
 
+	}
+	
+	@Test
+	public void whenApplyDiscountOnNullBoughtProducts() {
+		final Map<Long, List<Storage>> boughtProductsInStorages = null;
+		
+		BigDecimal expectedDiscountValue = new BigDecimal(0);
+		assertTrue(expectedDiscountValue.compareTo(discountCardService.applyDiscount(boughtProductsInStorages)) == 0);
+	}
+	
+	@Test
+	public void whenApplyDiscountOnEmptyBoughtProducts() {
+		final Map<Long, List<Storage>> boughtProductsInStorages = new HashMap<>();
+		
+		BigDecimal expectedDiscountValue = new BigDecimal(0);
+		assertTrue(expectedDiscountValue.compareTo(discountCardService.applyDiscount(boughtProductsInStorages)) == 0);
 	}
 }
