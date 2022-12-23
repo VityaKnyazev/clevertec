@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -12,7 +13,6 @@ import ru.clevertec.knyazev.dao.DiscountCardDAO;
 import ru.clevertec.knyazev.dto.DiscountCardDTO;
 import ru.clevertec.knyazev.entity.DiscountCard;
 import ru.clevertec.knyazev.entity.Storage;
-import ru.clevertec.knyazev.service.exception.ServiceException;
 import ru.clevertec.knyazev.util.Settings;
 
 class DiscountCardService extends AbstractDiscountService<DiscountCardDTO, Integer> {
@@ -26,19 +26,21 @@ class DiscountCardService extends AbstractDiscountService<DiscountCardDTO, Integ
 	}
 
 	@Override
-	Integer calculateDiscount(Collection<DiscountCardDTO> discountCardsDTO) throws ServiceException {
+	Integer calculateDiscount(Collection<DiscountCardDTO> discountCardsDTO) {
 		int discountValueInPercent = 0;
 
-		for (DiscountCardDTO discountCardDTO : discountCardsDTO) {
+		Iterator<DiscountCardDTO> discountCardDTOIterator = discountCardsDTO.iterator();
+
+		while (discountCardDTOIterator.hasNext()) {
+			DiscountCardDTO discountCardDTO = discountCardDTOIterator.next();
 			String discountCardNumber = discountCardDTO.getNumber();
 			if (!discountCardDAO.isDiscountCardExists(discountCardNumber)) {
-				throw new ServiceException("Discount card with number=" + discountCardNumber + " not exists!");
+				discountCardDTOIterator.remove();
+			} else {
+				DiscountCard discountCard = discountCardDAO.getDiscountCardByNumber(discountCardNumber);
+
+				discountValueInPercent += discountCard.getDiscountValue();
 			}
-
-			DiscountCard discountCard = discountCardDAO.getDiscountCardByNumber(discountCardNumber);
-
-			discountValueInPercent += discountCard.getDiscountValue();
-
 		}
 
 		return discountValueInPercent >= Settings.MAX_DISCOUNT_CARD_VAUE ? Settings.MAX_DISCOUNT_CARD_VAUE
@@ -72,20 +74,16 @@ class DiscountCardService extends AbstractDiscountService<DiscountCardDTO, Integ
 		}
 
 		Map<Long, List<Storage>> productGroups = divideOnGroup(boughtProductsInStorages);
-		if (productGroups.isEmpty())
+		if (productGroups.isEmpty()) {
 			return totalDiscountCardValue;
+		}
 
-		try {
-			Integer discountPercent = super.calculateFinalCardsDiscount(calculateDiscount(discountCardsDTO));
-			
-			for (Map.Entry<Long, List<Storage>> listStorages : productGroups.entrySet()) {
-				totalDiscountCardValue = totalDiscountCardValue.add(listStorages.getValue().stream()
-						.map(product -> product.getPrice().multiply(product.getQuantity())).reduce((a, b) -> a.add(b))
-						.orElse(new BigDecimal(0))
-						.multiply(new BigDecimal(discountPercent).divide(new BigDecimal(100))));
-			}
-		} catch (ServiceException e) {
-			// Nothing: Service exception because discount card number was not found
+		Integer discountPercent = super.calculateFinalCardsDiscount(calculateDiscount(discountCardsDTO));
+
+		for (Map.Entry<Long, List<Storage>> listStorages : productGroups.entrySet()) {
+			totalDiscountCardValue = totalDiscountCardValue.add(listStorages.getValue().stream()
+					.map(product -> product.getPrice().multiply(product.getQuantity())).reduce((a, b) -> a.add(b))
+					.orElse(new BigDecimal(0)).multiply(new BigDecimal(discountPercent).divide(new BigDecimal(100))));
 		}
 
 		return totalDiscountCardValue;

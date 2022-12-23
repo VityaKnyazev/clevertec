@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import ru.clevertec.knyazev.entity.Storage;
-import ru.clevertec.knyazev.service.exception.ServiceException;
 
 /**
  * 
@@ -29,7 +28,7 @@ abstract class AbstractDiscountService<T, V> implements DiscountService<T, V>{
 	 *                        discount will be calculating
 	 * @return representation <V> of discount calculating
 	 */
-	abstract V calculateDiscount(Collection<T> discountObjects) throws ServiceException;
+	abstract V calculateDiscount(Collection<T> discountObjects);
 	
 	/**
 	 * 
