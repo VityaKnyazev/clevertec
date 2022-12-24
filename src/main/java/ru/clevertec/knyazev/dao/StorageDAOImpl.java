@@ -17,6 +17,10 @@ public class StorageDAOImpl implements StorageDAO {
 		this.productDAO = productDAO;
 		makeStubStoragesList();
 	}
+	
+	public List<Storage> getAll() {
+		return storages;
+	}
 
 	@Override
 	public Boolean isStorageExistsByProductId(Long productId) {
@@ -44,14 +48,12 @@ public class StorageDAOImpl implements StorageDAO {
 
 	@Override
 	public Storage updateStorage(Storage storage) {
-		if (storages.contains(storage)) {
 			for (int i = 0; i < storages.size(); i++) {
-				if (storages.get(i).equals(storage)) {
+				if (storages.get(i).getId() == storage.getId()) {
 					storages.set(i, storage);
 					return storage;
 				}
 			}
-		}
 		
 		return null;
 	}

@@ -63,7 +63,7 @@ class DiscountCardService extends AbstractDiscountService<DiscountCardDTO, Integ
 	@Override
 	public BigDecimal applyDiscount(Map<Long, List<Storage>> boughtProductsInStorages) {
 		BigDecimal totalDiscountCardValue = new BigDecimal(0);
-		totalDiscountCardValue.setScale(Settings.PRICE_SCALE_VALUE, RoundingMode.HALF_UP);
+		totalDiscountCardValue = totalDiscountCardValue.setScale(Settings.PRICE_SCALE_VALUE, RoundingMode.HALF_UP);
 
 		if (discountCardsDTO == null || discountCardsDTO.isEmpty()) {
 			return totalDiscountCardValue;

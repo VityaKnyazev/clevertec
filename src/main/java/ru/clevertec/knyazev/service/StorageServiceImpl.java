@@ -78,7 +78,7 @@ public class StorageServiceImpl implements StorageService {
 	@Override
 	public BigDecimal getBoughtProductsTotalPrice(Map<Long, List<Storage>> boughtProductsGroups) {
 		BigDecimal totalPrice = new BigDecimal(0);
-		totalPrice.setScale(Settings.PRICE_SCALE_VALUE, RoundingMode.HALF_UP);
+		totalPrice = totalPrice.setScale(Settings.PRICE_SCALE_VALUE, RoundingMode.HALF_UP);
 
 		for (Map.Entry<Long, List<Storage>> bougtStorages : boughtProductsGroups.entrySet()) {
 			for (Storage storage : bougtStorages.getValue()) {
@@ -86,7 +86,7 @@ public class StorageServiceImpl implements StorageService {
 				BigDecimal price = storage.getPrice();
 
 				BigDecimal productPrice = new BigDecimal(0);
-				productPrice.setScale(Settings.PRICE_SCALE_VALUE, RoundingMode.HALF_UP);
+				productPrice = productPrice.setScale(Settings.PRICE_SCALE_VALUE, RoundingMode.HALF_UP);
 				productPrice = quantity.multiply(price);
 
 				totalPrice = totalPrice.add(productPrice);

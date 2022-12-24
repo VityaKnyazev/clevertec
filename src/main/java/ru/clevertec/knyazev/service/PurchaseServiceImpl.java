@@ -59,7 +59,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 				.applyDiscount(boughtProductsInStorages);
 
 		BigDecimal totalPrice = storageService.getBoughtProductsTotalPrice(boughtProductsInStorages);
-		totalPrice.setScale(Settings.PRICE_SCALE_VALUE, RoundingMode.HALF_UP);
+		totalPrice = totalPrice.setScale(Settings.PRICE_SCALE_VALUE, RoundingMode.HALF_UP);
 
 		List<PurchaseDTO> purchases = new PurchaseConverter().convertToDTO(boughtProductsInStorages);
 
@@ -69,6 +69,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 		casherService.increaseCasherId();
 
 		BigDecimal totalDiscountPrice = totalPrice.subtract(totalProductGroupsDiscount).subtract(totalCardsDiscount);
+		totalDiscountPrice = totalDiscountPrice.setScale(Settings.PRICE_SCALE_VALUE, RoundingMode.HALF_UP);
 		
 		return new ReceiptBuilder().setCasherIdWithDateTime(casherId).setShop(shop).setPurchases(purchases)
 				.setTotalPrice(totalPrice).setProductGroupsDiscountValue(totalProductGroupsDiscount)

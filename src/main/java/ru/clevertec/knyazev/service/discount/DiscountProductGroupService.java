@@ -15,10 +15,10 @@ class DiscountProductGroupService extends AbstractDiscountService<Storage, BigDe
 	@Override
 	BigDecimal calculateDiscount(Collection<Storage> storeagesGroupProduct) {
 		BigDecimal discountSumValue = new BigDecimal(0);			
-		discountSumValue.setScale(Settings.PRICE_SCALE_VALUE, RoundingMode.HALF_UP);
+		discountSumValue = discountSumValue.setScale(Settings.PRICE_SCALE_VALUE, RoundingMode.HALF_UP);
 		
 		BigDecimal realProductGroupQuantity = new BigDecimal(0);
-		realProductGroupQuantity.setScale(Settings.QUANTITY_SCALE_VALUE, RoundingMode.HALF_UP);
+		realProductGroupQuantity = realProductGroupQuantity.setScale(Settings.QUANTITY_SCALE_VALUE, RoundingMode.HALF_UP);
 		
 		for (Storage storage : storeagesGroupProduct) {
 			realProductGroupQuantity = realProductGroupQuantity.add(storage.getQuantity());
@@ -49,7 +49,7 @@ class DiscountProductGroupService extends AbstractDiscountService<Storage, BigDe
 	@Override
 	public BigDecimal applyDiscount(Map<Long, List<Storage>> boughtProductsInStorages) {
 		BigDecimal totalDiscountProductGroupValue = new BigDecimal(0);
-		totalDiscountProductGroupValue.setScale(Settings.PRICE_SCALE_VALUE, RoundingMode.HALF_UP);
+		totalDiscountProductGroupValue = totalDiscountProductGroupValue.setScale(Settings.PRICE_SCALE_VALUE, RoundingMode.HALF_UP);
 		
 		if (boughtProductsInStorages == null || boughtProductsInStorages.isEmpty()) {
 			return totalDiscountProductGroupValue;

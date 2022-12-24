@@ -1,6 +1,7 @@
 package ru.clevertec.knyazev.entity;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Storage implements Comparable<Storage>{
 	private Long id;
@@ -61,6 +62,25 @@ public class Storage implements Comparable<Storage>{
 
 	public static enum Unit {
 		т, кг, г, ед, л, шт
+	}	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, price, product, quantity, unit);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Storage other = (Storage) obj;
+		return Objects.equals(id, other.id) && Objects.equals(price, other.price)
+				&& Objects.equals(product, other.product) && Objects.equals(quantity, other.quantity)
+				&& unit == other.unit;
 	}
 
 	@Override

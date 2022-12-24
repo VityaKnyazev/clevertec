@@ -9,6 +9,13 @@
 plugins {
     id 'java-library'
      id 'application'
+     id 'jacoco'
+}
+
+ext {
+	junitJupiterVersion = '5.9.1'
+	mockitoVersion = '4.6.1'
+	jacocoVersion = '0.8.8'
 }
 
 repositories {
@@ -25,15 +32,27 @@ jar {
     }
 }
 
-compileJava.options.encoding = "UTF-8"
-compileTestJava.options.encoding = "UTF-8"
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
-    testImplementation 'org.mockito:mockito-junit-jupiter:4.6.1'
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion"
+    testImplementation "org.mockito:mockito-junit-jupiter:$mockitoVersion"
+}
+
+jacoco {
+	toolVersion = jacocoVersion
+}
+
+jacocoTestReport {
+	reports {
+		html.enabled = true
+	}
 }
 
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+test.finalizedBy jacocoTestReport
