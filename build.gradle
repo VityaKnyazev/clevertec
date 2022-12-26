@@ -10,39 +10,79 @@ plugins {
     id 'java-library'
      id 'application'
      id 'jacoco'
+     id 'org.liquibase.gradle' version '2.1.1'
 }
 
 ext {
+	postgresqlConVersion = '42.5.1'
+	hikariCPVersion = '5.0.1'
+	
+	logbackVersion = '1.4.5'
+	
+	liquibaseVersion = '4.16.1'
+	piocliVersion = '4.7.0'
+
 	junitJupiterVersion = '5.9.1'
 	mockitoVersion = '4.6.1'
-	jacocoVersion = '0.8.8'
+	jaCoCoVersion = '0.8.8'
 }
 
 repositories {
     mavenCentral()
+     maven {
+            url "https://plugins.gradle.org/m2/"
+        }
 }
 
 jar {
-	baseName = 'clevertec'
-    version =  '0.1.0'
+	archiveBaseName = 'clevertec-0.1.0'
     manifest {
         attributes(
-                'Main-Class': 'ru.clevertec.knyazev.CheckStandardRunner'
+                'Main-Class': 'ru.clevertec.knyazev.CheckAppRunner'
         )
     }
+        
+    from {
+		configurations.compileClasspath.filter{ it.exists() }.collect { it.isDirectory() ? it : zipTree(it) }
+	}
+	
+	duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+	
 }
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 
 dependencies {
+	implementation "org.postgresql:postgresql:$postgresqlConVersion"
+	implementation "com.zaxxer:HikariCP:$hikariCPVersion"
+	
+	implementation 'org.slf4j:slf4j-api:2.0.6'
+	implementation "ch.qos.logback:logback-classic:$logbackVersion"
+
+	liquibaseRuntime "org.liquibase:liquibase-core:$liquibaseVersion"
+	liquibaseRuntime "info.picocli:picocli:$piocliVersion"
+    liquibaseRuntime "org.postgresql:postgresql:$postgresqlConVersion"
+		
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion"
     testImplementation "org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion"
     testImplementation "org.mockito:mockito-junit-jupiter:$mockitoVersion"
 }
 
+liquibase {
+  activities {
+    main {
+          changeLogFile "/src/main/resources/liquibase/dbchangelog.xml"
+          driver "org.postgresql.Driver"
+		  url "jdbc:postgresql://localhost/receipt?useUnicode=true&characterEncoding=UTF-8"
+		  username "admin"
+          password "admin"       
+    }
+  }
+}
+
 jacoco {
-	toolVersion = jacocoVersion
+	toolVersion = jaCoCoVersion
 }
 
 jacocoTestReport {

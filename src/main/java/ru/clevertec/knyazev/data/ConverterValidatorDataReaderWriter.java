@@ -25,6 +25,7 @@ public class ConverterValidatorDataReaderWriter extends DataReaderWriterDecorato
 		super(dataReader, dataWriter);
 	}
 
+	@Override
 	public Map<ProductDTO, BigDecimal> readPurchases() throws IOException, ConverterException, ValidatorException {
 		fetchInputData();
 		String[] purchaseData = inputData.keySet().iterator().next();
@@ -43,6 +44,7 @@ public class ConverterValidatorDataReaderWriter extends DataReaderWriterDecorato
 		return purchases;
 	}
 
+	@Override
 	public Set<DiscountCardDTO> readDiscountCards() throws IOException, ConverterException {
 		fetchInputData();
 		String[] discountCardsData = inputData.values().iterator().next();
