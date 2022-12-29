@@ -97,5 +97,4 @@ ru.clevertec.knyazev.rest. Добавлен web.xml для перенаправ�
 		<li>Собрать проект в корне из консоли: gradle build или .\gradlew build</li>
 		<li>Запустить Tomcat 10 в Docker в корне в консоли: docker-compose up -d</li>
 		<li>Формируем чек по GET-запросу из браузера или с помощью Postman по uri, например: http://HOST:8080/clevertec?purchase=1-3&purchase=3-1&card=card-123456789.</li>
-	<ol>
-</ol>
+	</ol>
