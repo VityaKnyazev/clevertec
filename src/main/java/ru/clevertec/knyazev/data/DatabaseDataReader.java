@@ -9,13 +9,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ru.clevertec.knyazev.data.connection.DBConnection;
-import ru.clevertec.knyazev.data.connection.DBConnectionImpl;
 
 public class DatabaseDataReader implements DataReader {
 	private DBConnection dbConnection;
 
-	public DatabaseDataReader() {
-		dbConnection = DBConnectionImpl.getDBConnectionInstance();
+	public DatabaseDataReader(DBConnection dbConnection) {
+		this.dbConnection = dbConnection;
 	}
 
 	@Override
@@ -80,8 +79,6 @@ public class DatabaseDataReader implements DataReader {
 		final String cardNumberRowName = "number";
 		final String query = "SELECT " + idRowName + ", " +  cardNumberRowName  + " FROM " + tableName;
 		
-		final String DISCOUNT_CARD_PREFIX = "card-";
-		
 		String[] discountCards;
 		
 		try (Connection connection = dbConnection.getConnection();
@@ -102,7 +99,7 @@ public class DatabaseDataReader implements DataReader {
 			int i = 0;
 			while (rs.next()) {
 				String cardNumber = rs.getString(cardNumberRowName);
-				discountCards[i] = DISCOUNT_CARD_PREFIX + cardNumber;
+				discountCards[i] = CARD_PREFIX + cardNumber;
 				i++;
 			}
 		}

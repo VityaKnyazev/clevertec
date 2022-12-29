@@ -51,15 +51,20 @@ Builder (при создании квитанции), Decorator (при чтен
 для чтения id и количества товаров и кредитных карт из базы данных для последующей их покупки и формирования чека.</li>
 <li>В проект также добавлены зависимости для Logback логера, чтобы отключить логирование от HicariCP для красивого
 вывода чека в консоль из базы данных. Создан файл настроек для логера logback.xml в src/main/resources</li>
+<li>По п. 14: Реализован интерфейс для получения чека по GET-запросу. Использован spring web mvc. Файлы с настройкой конфигурации spring, контроллерами в пакете:
+ru.clevertec.knyazev.rest. Добавлен web.xml для перенаправления на страницу обработки ошибок.</li>
+<li>По п. 15: В docker-compose.yml добавлены настройка для поднятия Tomcat-сервера и добавления в docker-контейнер собранного с помощью Gradle war-файла.
+Теперь получить чек можно с помощью Get-запроса по uri, например: http://HOST:8080/clevertec?purchase=1-3&purchase=3-1&card=card-123456789. Перед этим необходимо запустить из корня проекта в 
+командной строке: docker-compose up</li>
 </ol>
 
 <h3>Стек</h3>
 <ol>
-<li>Java 17, Gradle 7.5, JDBC, HikariCP, PostgreSQL, Docker</li>
+<li>Java 17, Gradle 7.5, JDBC, HikariCP, PostgreSQL, Docker, Spring-WEB MVC, Tomcat 10</li>
 <li>JUnit 5, Mockito, JaCoCo (тесты)</li>
 </ol>
 
-<h4>Сборка и запуск приложения:</h4>
+<h4>Сборка и запуск приложения c java из командной строки:</h4>
 <ol>
 <li>Запуск приложения возможен в следующих режимах:</li>
 	<ol>
@@ -86,4 +91,11 @@ Builder (при создании квитанции), Decorator (при чтен
 		и заполняем их данными. Для этого там же запускаем liquibase: gradle update. Далее проходим в: cd build/libs, в случае если проект собран, запускаем чтение
 		данных из базы данных и формирование чека в консоли: java -jar clevertec-0.1.0.jar database console</li>
 	</ol>
+	
+	<h5>Запуск на сервере</h5>
+	<ol>
+		<li>Собрать проект в корне из консоли: gradle build или .\gradlew build</li>
+		<li>Запустить Tomcat 10 в Docker в корне в консоли: docker-compose up -d</li>
+		<li>Формируем чек по GET-запросу из браузера или с помощью Postman по uri, например: http://HOST:8080/clevertec?purchase=1-3&purchase=3-1&card=card-123456789.</li>
+	<ol>
 </ol>

@@ -13,6 +13,8 @@ import ru.clevertec.knyazev.service.ShopService;
 import ru.clevertec.knyazev.service.ShopServiceImpl;
 import ru.clevertec.knyazev.service.StorageService;
 import ru.clevertec.knyazev.service.StorageServiceImpl;
+import ru.clevertec.knyazev.view.AbstractReceiptBuilder;
+import ru.clevertec.knyazev.view.ReceiptBuilderImpl;
 
 public class ContextInitializer {
 	
@@ -22,8 +24,10 @@ public class ContextInitializer {
 		StorageService storageService = new StorageServiceImpl(new StorageDAOImpl(new ProductDAOImpl()));
 		CasherService casherService = new CasherServiceImpl(new CasherDaoImpl());
 		ShopService shopService = new ShopServiceImpl(new ShopDAOImpl(new AddressDAOImpl()));
+		
+		AbstractReceiptBuilder consoleReceiptBuilder = new ReceiptBuilderImpl();
 				
-		PurchaseService purchaseService = new PurchaseServiceImpl(storageService, casherService, shopService);
+		PurchaseService purchaseService = new PurchaseServiceImpl(storageService, casherService, shopService, consoleReceiptBuilder);
 		
 		return purchaseService;
 	}

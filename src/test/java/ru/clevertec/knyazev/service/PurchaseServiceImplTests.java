@@ -26,7 +26,9 @@ import ru.clevertec.knyazev.entity.Shop;
 import ru.clevertec.knyazev.entity.Storage;
 import ru.clevertec.knyazev.entity.Storage.Unit;
 import ru.clevertec.knyazev.service.exception.ServiceException;
+import ru.clevertec.knyazev.view.AbstractReceiptBuilder;
 import ru.clevertec.knyazev.view.Receipt;
+import ru.clevertec.knyazev.view.ReceiptBuilderImpl;
 
 public class PurchaseServiceImplTests {
 	private StorageService storageServiceMock;
@@ -41,7 +43,8 @@ public class PurchaseServiceImplTests {
 		casherServiceMock = Mockito.mock(CasherService.class);
 		shopServiceMock = Mockito.mock(ShopService.class);
 
-		purchaseService = new PurchaseServiceImpl(storageServiceMock, casherServiceMock, shopServiceMock);
+		AbstractReceiptBuilder receiptBuilder = new ReceiptBuilderImpl();
+		purchaseService = new PurchaseServiceImpl(storageServiceMock, casherServiceMock, shopServiceMock, receiptBuilder);
 	}
 
 	@Test

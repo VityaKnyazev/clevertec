@@ -17,11 +17,10 @@ import ru.clevertec.knyazev.view.Receipt;
 
 public class CheckAppRunner {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		
-		DataReaderWriterDecorator dataReaderWriter = new DataFactory(args).getDataReaderWriter();
-
 		try {
+			DataReaderWriterDecorator dataReaderWriter = new DataFactory(args).getDataReaderWriter();
 			Map<ProductDTO, BigDecimal> purchases = dataReaderWriter.readPurchases();
 			Set<DiscountCardDTO> discountCardsDTO = dataReaderWriter.readDiscountCards();
 

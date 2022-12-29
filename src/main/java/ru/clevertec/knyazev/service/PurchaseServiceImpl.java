@@ -17,18 +17,20 @@ import ru.clevertec.knyazev.service.discount.DiscountService.Group;
 import ru.clevertec.knyazev.service.exception.ServiceException;
 import ru.clevertec.knyazev.util.PurchaseConverter;
 import ru.clevertec.knyazev.util.Settings;
+import ru.clevertec.knyazev.view.AbstractReceiptBuilder;
 import ru.clevertec.knyazev.view.Receipt;
-import ru.clevertec.knyazev.view.ReceiptBuilder;
 
 public class PurchaseServiceImpl implements PurchaseService {
 	private StorageService storageService;
 	private CasherService casherService;
 	private ShopService shopService;
+	private AbstractReceiptBuilder receiptBuilder;
 
-	public PurchaseServiceImpl(StorageService storageService, CasherService casherService, ShopService shopService) {
+	public PurchaseServiceImpl(StorageService storageService, CasherService casherService, ShopService shopService, AbstractReceiptBuilder receiptBuilder) {
 		this.storageService = storageService;
 		this.casherService = casherService;
 		this.shopService = shopService;
+		this.receiptBuilder = receiptBuilder;
 	}
 
 	@Override
@@ -71,7 +73,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 		BigDecimal totalDiscountPrice = totalPrice.subtract(totalProductGroupsDiscount).subtract(totalCardsDiscount);
 		totalDiscountPrice = totalDiscountPrice.setScale(Settings.PRICE_SCALE_VALUE, RoundingMode.HALF_UP);
 		
-		return new ReceiptBuilder().setCasherIdWithDateTime(casherId).setShop(shop).setPurchases(purchases)
+		return receiptBuilder.setCasherIdWithDateTime(casherId).setShop(shop).setPurchases(purchases)
 				.setTotalPrice(totalPrice).setProductGroupsDiscountValue(totalProductGroupsDiscount)
 				.setDiscountCardsValue(totalCardsDiscount).setTotalDiscountPrice(totalDiscountPrice).build();
 

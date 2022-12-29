@@ -22,7 +22,7 @@ public class DBConnectionImpl implements DBConnection {
 	@Override
 	public Connection getConnection() throws SQLException {
 		Connection connection = dataSource.getConnection();
-		connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+		connection.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
 		return connection;
 	}
 	
