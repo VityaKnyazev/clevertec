@@ -23,6 +23,7 @@ ext {
 	junitJupiterVersion = '5.9.1'
 	mockitoVersion = '4.6.1'
 	jaCoCoVersion = '0.8.8'
+	springTestVersion = '6.0.3'
 }
 
 repositories {
@@ -68,6 +69,8 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion"
     testImplementation "org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion"
     testImplementation "org.mockito:mockito-junit-jupiter:$mockitoVersion"
+    testImplementation "org.springframework:spring-test:$springTestVersion"
+    testImplementation "jakarta.servlet:jakarta.servlet-api:$jakartaServletApiVersion"
 }
 
 liquibase {

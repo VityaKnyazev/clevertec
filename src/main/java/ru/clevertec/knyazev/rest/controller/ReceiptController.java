@@ -76,7 +76,7 @@ public class ReceiptController {
 			return new ResponseEntity<String>(receipt.toString(), HttpStatus.OK);
 			
 		} catch (IOException | ConverterException | ValidatorException | ServiceException e) {
-			return new ResponseEntity<String>(e.getMessage().toString(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	
 	}
