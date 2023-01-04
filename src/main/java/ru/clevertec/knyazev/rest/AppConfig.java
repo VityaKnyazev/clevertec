@@ -3,18 +3,13 @@ package ru.clevertec.knyazev.rest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import ru.clevertec.knyazev.dao.AddressDAO;
-import ru.clevertec.knyazev.dao.AddressDAOImpl;
 import ru.clevertec.knyazev.dao.CasherDAO;
 import ru.clevertec.knyazev.dao.CasherDaoImpl;
-import ru.clevertec.knyazev.dao.ProductDAO;
-import ru.clevertec.knyazev.dao.ProductDAOImpl;
 import ru.clevertec.knyazev.dao.ShopDAO;
-import ru.clevertec.knyazev.dao.ShopDAOImpl;
 import ru.clevertec.knyazev.dao.StorageDAO;
-import ru.clevertec.knyazev.dao.StorageDAOImpl;
 import ru.clevertec.knyazev.service.CasherService;
 import ru.clevertec.knyazev.service.CasherServiceImpl;
 import ru.clevertec.knyazev.service.PurchaseService;
@@ -28,7 +23,8 @@ import ru.clevertec.knyazev.view.ReceiptBuilderImpl;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "ru.clevertec.knyazev.rest.controller")
+@EnableTransactionManagement
+@ComponentScan(basePackages = {"ru.clevertec.knyazev.dao", "ru.clevertec.knyazev.rest.controller"})
 public class AppConfig {
 
 	@Bean
@@ -37,8 +33,8 @@ public class AppConfig {
 	}
 	
 	@Bean
-	StorageService storageServiceImpl(StorageDAO storageDAOImpl) {
-		return new StorageServiceImpl(storageDAOImpl);
+	StorageService storageServiceImpl(StorageDAO storageDAOJPA) {
+		return new StorageServiceImpl(storageDAOJPA);
 	}
 	
 	@Bean
@@ -47,34 +43,14 @@ public class AppConfig {
 	}	
 	
 	@Bean
-	ShopService shopServiceImpl(ShopDAO shopDAOImpl) {
-		return new ShopServiceImpl(shopDAOImpl);
+	ShopService shopServiceImpl(ShopDAO shopDAOJPA) {
+		return new ShopServiceImpl(shopDAOJPA);
 	}
-	
-	@Bean
-	StorageDAO storageDAOImpl(ProductDAO productDAOImpl) {
-		return new StorageDAOImpl(productDAOImpl);
-	}
-	
-	@Bean
-	ProductDAO productDAOImpl() {
-		return new ProductDAOImpl();
-	}
-	
+		
 	@Bean
 	CasherDAO casherDAOImpl() {
 		return new CasherDaoImpl();
-	}
-	
-	@Bean
-	ShopDAO shopDAO(AddressDAO addressDAOImpl) {
-		return new ShopDAOImpl(addressDAOImpl);
-	}
-	
-	@Bean
-	AddressDAO addressDAOImpl() {
-		return new AddressDAOImpl();
-	}
+	}	
 	
 	@Bean
 	AbstractReceiptBuilder consoleReceiptBuilder() {

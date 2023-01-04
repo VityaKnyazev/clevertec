@@ -17,7 +17,7 @@
 	</changeSet>
 
 	<changeSet id="1" author="VityaKnyazev">
-		<sqlFile path="../createDatabaseTables.sql"
+		<sqlFile path="../createClevertecDatabaseTables.sql"
 			encoding="UTF-8" endDelimiter=";" splitStatements="true"
 			stripComments="true" relativeToChangelogFile="true" />
 	</changeSet>
@@ -27,7 +27,7 @@
 	</changeSet>
 
 	<changeSet id="3" author="VityaKnyazev">
-		<sqlFile path="../fillTablesWithStartUpData.sql"
+		<sqlFile path="../fillClevertecTablesWithStartUpData.sql"
 			encoding="UTF-8" endDelimiter=";" splitStatements="true"
 			stripComments="true" relativeToChangelogFile="true" />
 	</changeSet>

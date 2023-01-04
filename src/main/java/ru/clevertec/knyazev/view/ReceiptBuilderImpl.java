@@ -8,7 +8,7 @@ import java.util.List;
 import ru.clevertec.knyazev.dto.PurchaseDTO;
 import ru.clevertec.knyazev.entity.Address;
 import ru.clevertec.knyazev.entity.Shop;
-import ru.clevertec.knyazev.entity.Storage.Unit;
+import ru.clevertec.knyazev.entity.util.Unit;
 import ru.clevertec.knyazev.util.Settings;
 
 public class ReceiptBuilderImpl extends AbstractReceiptBuilder {

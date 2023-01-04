@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import jakarta.transaction.Transactional;
 import ru.clevertec.knyazev.dto.DiscountCardDTO;
 import ru.clevertec.knyazev.dto.ProductDTO;
 import ru.clevertec.knyazev.dto.PurchaseDTO;
@@ -33,6 +34,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 		this.receiptBuilder = receiptBuilder;
 	}
 
+	@Transactional
 	@Override
 	public Receipt buyPurchases(Map<ProductDTO, BigDecimal> productsDTO, Set<DiscountCardDTO> discountCardsDTO)
 			throws ServiceException {

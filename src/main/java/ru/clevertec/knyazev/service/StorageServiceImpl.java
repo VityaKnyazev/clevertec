@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import jakarta.transaction.Transactional;
 import ru.clevertec.knyazev.dao.StorageDAO;
 import ru.clevertec.knyazev.entity.Storage;
 import ru.clevertec.knyazev.service.exception.ServiceException;
@@ -19,6 +20,7 @@ public class StorageServiceImpl implements StorageService {
 		this.storageDAO = storageDAO;
 	}
 
+	@Transactional
 	@Override
 	public List<Storage> buyProductFromStorages(Long productId, BigDecimal quantity) throws ServiceException {
 		// Проверяем существование продукта в хранилищах

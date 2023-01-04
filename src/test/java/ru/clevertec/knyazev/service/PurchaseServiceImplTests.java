@@ -24,7 +24,7 @@ import ru.clevertec.knyazev.entity.Casher;
 import ru.clevertec.knyazev.entity.Product;
 import ru.clevertec.knyazev.entity.Shop;
 import ru.clevertec.knyazev.entity.Storage;
-import ru.clevertec.knyazev.entity.Storage.Unit;
+import ru.clevertec.knyazev.entity.util.Unit;
 import ru.clevertec.knyazev.service.exception.ServiceException;
 import ru.clevertec.knyazev.view.AbstractReceiptBuilder;
 import ru.clevertec.knyazev.view.Receipt;
@@ -65,8 +65,8 @@ public class PurchaseServiceImplTests {
 		BigDecimal totalPrice = storages.stream().map(storage -> storage.getQuantity().multiply(storage.getPrice()))
 				.reduce((a, b) -> a.add(b)).orElse(new BigDecimal(0));
 
-		Address address = new Address("212658", "Belarus", "Minsk", "Malaya str", "12");
-		Shop shop = new Shop("TestShop", address, "+375 29 689 23 56");
+		Address address = new Address(1L, "212658", "Belarus", "Minsk", "Malaya str", "12");
+		Shop shop = new Shop(1L, "TestShop", address, "+375 29 689 23 56");
 
 		Casher casher = new Casher(1L);
 

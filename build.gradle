@@ -8,10 +8,13 @@ plugins {
 }
 
 ext {
+	javaVersion = '17'
+
 	postgresqlConVersion = '42.5.1'
 	hikariCPVersion = '5.0.1'
 	
-	springWebMVCVersion = '6.0.3'
+	springModulesVersion = '6.0.3'
+	hibernateVersion = '6.1.6.Final'
 	jakartaServletApiVersion = '6.0.0'
 	
 	slf4jApiVersion = '2.0.6'
@@ -31,6 +34,12 @@ repositories {
      maven {
             url "https://plugins.gradle.org/m2/"
         }
+}
+
+java {
+    toolchain {
+    	languageVersion.set(JavaLanguageVersion.of("$javaVersion"))
+    }
 }
 
 jar {
@@ -53,10 +62,14 @@ compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 
 dependencies {
+	implementation "org.springframework:spring-orm:$springModulesVersion"
+	implementation "org.hibernate.orm:hibernate-core:$hibernateVersion"
+	
+
 	implementation "org.postgresql:postgresql:$postgresqlConVersion"
 	implementation "com.zaxxer:HikariCP:$hikariCPVersion"
 		
-	implementation "org.springframework:spring-webmvc:$springWebMVCVersion"
+	implementation "org.springframework:spring-webmvc:$springModulesVersion"
 	compileOnly "jakarta.servlet:jakarta.servlet-api:$jakartaServletApiVersion"
 	
 	implementation "org.slf4j:slf4j-api:$slf4jApiVersion"
@@ -75,12 +88,19 @@ dependencies {
 
 liquibase {
   activities {
-    main {
-          changeLogFile "/src/main/resources/liquibase/dbchangelog.xml"
+    dataInput {
+          changeLogFile "/src/main/resources/liquibase/db-input-data-changelog.xml"
           driver "org.postgresql.Driver"
-		  url "jdbc:postgresql://localhost/receipt?useUnicode=true&characterEncoding=UTF-8"
+		  url "jdbc:postgresql://localhost:5432/purchaser?useUnicode=true&characterEncoding=UTF-8"
+		  username "shopClient"
+          password "shopClient"     
+    }
+    clevertec {
+    	  changeLogFile "/src/main/resources/liquibase/db-clevertec-changelog.xml"
+          driver "org.postgresql.Driver"
+		  url "jdbc:postgresql://localhost:5433/clevertec?useUnicode=true&characterEncoding=UTF-8"
 		  username "admin"
-          password "admin"       
+          password "admin" 
     }
   }
 }

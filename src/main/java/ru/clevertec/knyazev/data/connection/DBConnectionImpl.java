@@ -9,7 +9,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 public class DBConnectionImpl implements DBConnection {
-	private final String DB_PROPERTIES = "/application.properties";
+	private final String DB_PROPERTIES = "/applicationDataInput.properties";
 	private DataSource dataSource;
 	
 	private static DBConnection dbConnection;

@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import ru.clevertec.knyazev.entity.Product;
 import ru.clevertec.knyazev.entity.Storage;
-import ru.clevertec.knyazev.entity.Storage.Unit;
+import ru.clevertec.knyazev.entity.util.Unit;
 import ru.clevertec.knyazev.util.Settings;
 
 public class DiscountProductGroupServiceTests {

@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.clevertec.knyazev.dto.PurchaseDTO;
 import ru.clevertec.knyazev.entity.Address;
 import ru.clevertec.knyazev.entity.Shop;
-import ru.clevertec.knyazev.entity.Storage.Unit;
+import ru.clevertec.knyazev.entity.util.Unit;
 import ru.clevertec.knyazev.service.PurchaseService;
 import ru.clevertec.knyazev.service.exception.ServiceException;
 import ru.clevertec.knyazev.view.Receipt;
@@ -48,8 +48,8 @@ public class ReceiptControllerTests {
 			}
 		};
 
-		Address Adddress = new Address("120589", "Russia", "MOSCOW", "Chapaeva, str", "128");
-		Shop shop = new Shop("TestShop", Adddress, "+7xx 85 698 55");
+		Address Adddress = new Address(1L, "120589", "Russia", "MOSCOW", "Chapaeva, str", "128");
+		Shop shop = new Shop(1L, "TestShop", Adddress, "+7xx 85 698 55");
 
 		receipt = new ReceiptBuilderImpl().setCasherIdWithDateTime(1L).setShop(shop).setPurchases(purchases)
 				.setDiscountCardsValue(BigDecimal.ZERO).setProductGroupsDiscountValue(BigDecimal.ZERO)

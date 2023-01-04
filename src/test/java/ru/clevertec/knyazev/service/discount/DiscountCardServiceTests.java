@@ -19,7 +19,7 @@ import ru.clevertec.knyazev.dto.DiscountCardDTO;
 import ru.clevertec.knyazev.entity.DiscountCard;
 import ru.clevertec.knyazev.entity.Product;
 import ru.clevertec.knyazev.entity.Storage;
-import ru.clevertec.knyazev.entity.Storage.Unit;
+import ru.clevertec.knyazev.entity.util.Unit;
 
 public class DiscountCardServiceTests {
 	private DiscountCardDAO discountCardDAOMock;

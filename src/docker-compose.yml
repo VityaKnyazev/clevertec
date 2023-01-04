@@ -16,6 +16,8 @@ services:
       - ./build/libs/clevertec.war:/usr/local/tomcat/webapps/clevertec.war
     ports:
       - 8080:8080
+    networks:
+      - taskclevertec
     depends_on:
       - db-clevertec
   db-clevertec:
@@ -23,7 +25,13 @@ services:
     restart: always
     ports:
       - 5433:5432
+    networks:
+      - taskclevertec
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
       - POSTGRES_DB=clevertec
+
+networks:
+  taskclevertec:
+    driver: bridge

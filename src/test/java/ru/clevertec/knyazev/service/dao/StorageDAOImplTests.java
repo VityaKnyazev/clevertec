@@ -18,7 +18,7 @@ import ru.clevertec.knyazev.dao.ProductDAOImpl;
 import ru.clevertec.knyazev.dao.StorageDAOImpl;
 import ru.clevertec.knyazev.entity.Product;
 import ru.clevertec.knyazev.entity.Storage;
-import ru.clevertec.knyazev.entity.Storage.Unit;
+import ru.clevertec.knyazev.entity.util.Unit;
 
 public class StorageDAOImplTests {
 	private StorageDAOImpl storageDAOImpl;
