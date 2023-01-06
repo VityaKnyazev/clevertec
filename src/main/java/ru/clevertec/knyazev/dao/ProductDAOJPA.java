@@ -10,12 +10,22 @@ import ru.clevertec.knyazev.entity.Product;
 public class ProductDAOJPA implements ProductDAO {
 	@PersistenceContext
 	EntityManager entityManager;
+	
+	public ProductDAOJPA() {}
 
+	public ProductDAOJPA(EntityManager entityManager) {
+		this.entityManager = entityManager;
+	}
+	
 	@Override
 	public Product getProductById(Long id) {
-		Product product = entityManager.find(Product.class, id);
+		Product product = null;
 		
-		return product != null ? product : null;
+		if (id != null && id > 0L) {
+			product = entityManager.find(Product.class, id);
+		}
+		
+		return product;
 	}
 
 	@Override

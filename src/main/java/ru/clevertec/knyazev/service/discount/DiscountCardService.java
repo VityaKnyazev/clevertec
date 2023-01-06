@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import jakarta.transaction.Transactional;
 import ru.clevertec.knyazev.dao.DiscountCardDAO;
 import ru.clevertec.knyazev.dto.DiscountCardDTO;
 import ru.clevertec.knyazev.entity.DiscountCard;
@@ -25,6 +26,7 @@ class DiscountCardService extends AbstractDiscountService<DiscountCardDTO, Integ
 		this.discountCardsDTO = discountCardsDTO;
 	}
 
+	@Transactional
 	@Override
 	Integer calculateDiscount(Collection<DiscountCardDTO> discountCardsDTO) {
 		int discountValueInPercent = 0;

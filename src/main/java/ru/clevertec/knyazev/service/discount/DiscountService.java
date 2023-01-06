@@ -25,6 +25,6 @@ public interface DiscountService<T, V> {
 	BigDecimal applyDiscount(Map<Long, List<Storage>> boughtProductsInStorages);
 
 	public static enum Group {
-		DISCOUNT_CARD_GROUP, DISCOUNT_PRODUCT_GROUP
+		DISCOUNT_CARD_GROUP, DISCOUNT_CARD_GROUP_DB_ORM, DISCOUNT_PRODUCT_GROUP
 	}
 }

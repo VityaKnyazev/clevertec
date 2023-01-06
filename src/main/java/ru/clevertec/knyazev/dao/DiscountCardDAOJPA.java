@@ -11,11 +11,24 @@ public class DiscountCardDAOJPA implements DiscountCardDAO {
 	@PersistenceContext
 	EntityManager entityManager;
 
+	public DiscountCardDAOJPA() {
+	}
+
+	public DiscountCardDAOJPA(EntityManager entityManager) {
+		this.entityManager = entityManager;
+	}
+
 	@Override
 	public DiscountCard getDiscountCardByNumber(String number) {
-		DiscountCard discountCard = (DiscountCard) entityManager.createQuery("SELECT discountCard FROM DiscountCard discountCard WHERE discountCard.number = ?1").setParameter(1, number).getSingleResult();
-		
-		return discountCard != null ? discountCard : null;
+		DiscountCard discountCard = null;
+
+		if (number != null && number.length() > 0) {
+			discountCard = (DiscountCard) entityManager
+					.createQuery("SELECT discountCard FROM DiscountCard discountCard WHERE discountCard.number = ?1")
+					.setParameter(1, number).getSingleResult();
+		}
+
+		return discountCard;
 	}
 
 	@Override
@@ -24,15 +37,16 @@ public class DiscountCardDAOJPA implements DiscountCardDAO {
 			entityManager.persist(discountCard);
 			return discountCard;
 		}
-		
+
 		return null;
 	}
 
 	@Override
 	public boolean isDiscountCardExists(String discountCardNumber) {
-		int quantity = 0;		
-		quantity = entityManager.createNativeQuery("SELECT count(id) FROM discount_card WHERE card_number = ?1").setParameter(1, discountCardNumber).getFirstResult();
-		
+		long quantity = 0;
+		quantity = ((Number) entityManager.createNativeQuery("SELECT COUNT(id) FROM discount_card WHERE card_number = ?1")
+				.setParameter(1, discountCardNumber).getSingleResult()).longValue();
+
 		return quantity > 0;
 	}
 

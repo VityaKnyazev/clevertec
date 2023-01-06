@@ -1,4 +1,4 @@
-package ru.clevertec.knyazev.service.dao;
+package ru.clevertec.knyazev.dao;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -8,8 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import ru.clevertec.knyazev.dao.ProductDAO;
-import ru.clevertec.knyazev.dao.ProductDAOImpl;
 import ru.clevertec.knyazev.entity.Product;
 
 public class ProductDAOImlTests {

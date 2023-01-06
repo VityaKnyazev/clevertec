@@ -57,7 +57,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
 		// Расчет скидок. Делим товары на группы для расчета и применения скидок.
 		BigDecimal totalProductGroupsDiscount = DiscountFactory.getInstance()
-				.createDiscountService(Group.DISCOUNT_PRODUCT_GROUP).applyDiscount(boughtProductsInStorages);
+				.createDiscountService(Group.DISCOUNT_PRODUCT_GROUP, null).applyDiscount(boughtProductsInStorages);
 		BigDecimal totalCardsDiscount = DiscountFactory.getInstance()
 				.createDiscountService(Group.DISCOUNT_CARD_GROUP, discountCardsDTO)
 				.applyDiscount(boughtProductsInStorages);
