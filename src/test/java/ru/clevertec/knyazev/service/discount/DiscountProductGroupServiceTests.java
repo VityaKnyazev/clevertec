@@ -17,7 +17,7 @@ import ru.clevertec.knyazev.entity.util.Unit;
 import ru.clevertec.knyazev.util.Settings;
 
 public class DiscountProductGroupServiceTests {
-	private DiscountService<Storage, BigDecimal> discountProductGroupServise;
+	private DiscountService discountProductGroupServise;
 	
 	@BeforeEach
 	public void setUp() {

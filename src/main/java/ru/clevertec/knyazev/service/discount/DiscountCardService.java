@@ -16,13 +16,16 @@ import ru.clevertec.knyazev.entity.DiscountCard;
 import ru.clevertec.knyazev.entity.Storage;
 import ru.clevertec.knyazev.util.Settings;
 
-class DiscountCardService extends AbstractDiscountService<DiscountCardDTO, Integer> {
+public class DiscountCardService extends AbstractDiscountService<DiscountCardDTO, Integer> {
 
 	private DiscountCardDAO discountCardDAO;
 	private Set<DiscountCardDTO> discountCardsDTO;
 
-	DiscountCardService(DiscountCardDAO discountCardDAO, Set<DiscountCardDTO> discountCardsDTO) {
+	public DiscountCardService(DiscountCardDAO discountCardDAO) {
 		this.discountCardDAO = discountCardDAO;
+	}
+	
+	public void setDiscountCardsDTO(Set<DiscountCardDTO> discountCardsDTO) {
 		this.discountCardsDTO = discountCardsDTO;
 	}
 

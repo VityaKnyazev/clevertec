@@ -44,7 +44,7 @@ public class DiscountCardDAOJPA implements DiscountCardDAO {
 	@Override
 	public boolean isDiscountCardExists(String discountCardNumber) {
 		long quantity = 0;
-		quantity = ((Number) entityManager.createNativeQuery("SELECT COUNT(id) FROM discount_card WHERE card_number = ?1")
+		quantity = ((Number) entityManager.createNativeQuery("SELECT COUNT(id) FROM discount_card WHERE number = ?1")
 				.setParameter(1, discountCardNumber).getSingleResult()).longValue();
 
 		return quantity > 0;

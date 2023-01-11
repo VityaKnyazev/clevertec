@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -46,7 +45,7 @@ public class AppConnectionConfig {
 	}
 	
 	@Bean
-	AbstractEntityManagerFactoryBean localContainerEntityManagerFactoryBean(DataSource hikariDataSource, JpaVendorAdapter hibernateJpaVendorAdapter) {
+	LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean(DataSource hikariDataSource, JpaVendorAdapter hibernateJpaVendorAdapter) {
 		LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 		localContainerEntityManagerFactoryBean.setDataSource(hikariDataSource);
 		localContainerEntityManagerFactoryBean.setJpaVendorAdapter(hibernateJpaVendorAdapter);

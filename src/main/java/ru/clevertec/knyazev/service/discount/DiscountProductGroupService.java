@@ -10,7 +10,7 @@ import java.util.Map;
 import ru.clevertec.knyazev.entity.Storage;
 import ru.clevertec.knyazev.util.Settings;
 
-class DiscountProductGroupService extends AbstractDiscountService<Storage, BigDecimal>{
+public class DiscountProductGroupService extends AbstractDiscountService<Storage, BigDecimal>{
 
 	@Override
 	BigDecimal calculateDiscount(Collection<Storage> storeagesGroupProduct) {

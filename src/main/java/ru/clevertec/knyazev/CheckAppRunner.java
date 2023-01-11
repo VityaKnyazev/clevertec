@@ -23,9 +23,11 @@ public class CheckAppRunner {
 			DataReaderWriterDecorator dataReaderWriter = new DataFactory(args).getDataReaderWriter();
 			Map<ProductDTO, BigDecimal> purchases = dataReaderWriter.readPurchases();
 			Set<DiscountCardDTO> discountCardsDTO = dataReaderWriter.readDiscountCards();
-
-			PurchaseService purchaseService = ContextInitializer.createContext();
-			Receipt recept = purchaseService.buyPurchases(purchases, discountCardsDTO);
+			
+			ContextInitializer.createDiscountContext(discountCardsDTO);
+			
+			PurchaseService purchaseService = ContextInitializer.createProductContext();
+			Receipt recept = purchaseService.buyPurchases(purchases);
 
 			dataReaderWriter.writeData(recept.toString());
 		} catch (IOException | ConverterException | ValidatorException | ServiceException e) {

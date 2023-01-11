@@ -8,6 +8,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import ru.clevertec.knyazev.dao.CasherDAO;
 import ru.clevertec.knyazev.dao.CasherDaoImpl;
+import ru.clevertec.knyazev.dao.DiscountCardDAO;
 import ru.clevertec.knyazev.dao.ShopDAO;
 import ru.clevertec.knyazev.dao.StorageDAO;
 import ru.clevertec.knyazev.service.CasherService;
@@ -18,6 +19,9 @@ import ru.clevertec.knyazev.service.ShopService;
 import ru.clevertec.knyazev.service.ShopServiceImpl;
 import ru.clevertec.knyazev.service.StorageService;
 import ru.clevertec.knyazev.service.StorageServiceImpl;
+import ru.clevertec.knyazev.service.discount.DiscountCardService;
+import ru.clevertec.knyazev.service.discount.DiscountProductGroupService;
+import ru.clevertec.knyazev.service.discount.DiscountService;
 import ru.clevertec.knyazev.view.AbstractReceiptBuilder;
 import ru.clevertec.knyazev.view.ReceiptBuilderImpl;
 
@@ -46,14 +50,25 @@ public class AppConfig {
 	ShopService shopServiceImpl(ShopDAO shopDAOJPA) {
 		return new ShopServiceImpl(shopDAOJPA);
 	}
-		
+	
 	@Bean
 	CasherDAO casherDAOImpl() {
 		return new CasherDaoImpl();
 	}	
 	
 	@Bean
-	AbstractReceiptBuilder consoleReceiptBuilder() {
+	AbstractReceiptBuilder receiptBuilderImpl() {
 		return new ReceiptBuilderImpl();		
 	}
+	
+	@Bean
+	DiscountService discountCardService(DiscountCardDAO discountCardDAOJPA) {
+		return new DiscountCardService(discountCardDAOJPA);
+	}
+	
+	@Bean
+	DiscountService discountProductGroupService() {
+		return new DiscountProductGroupService();
+	}
+	
 }

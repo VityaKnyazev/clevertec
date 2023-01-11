@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 import ru.clevertec.knyazev.dto.PurchaseDTO;
 import ru.clevertec.knyazev.entity.Address;
@@ -61,7 +62,7 @@ public class ReceiptBuilderImpl extends AbstractReceiptBuilder {
 			productGroupPrice.setScale(Settings.PRICE_SCALE_VALUE, RoundingMode.HALF_UP);
 			productGroupPrice = quantity.multiply(price);
 
-			bodyData += String.format(BODY_FORMAT, quantity, unit, description, price, productGroupPrice)
+			bodyData += String.format(Locale.ROOT, BODY_FORMAT, quantity, unit, description, price, productGroupPrice)
 					+ System.lineSeparator();
 		}
 
@@ -74,7 +75,7 @@ public class ReceiptBuilderImpl extends AbstractReceiptBuilder {
 	@Override
 	public ReceiptBuilderImpl setTotalPrice(BigDecimal totalPrice) {
 		final String TOTAL_PRICE_FORMAT = "%-8S %92.2f";
-		this.totalPrice = String.format(TOTAL_PRICE_FORMAT, "total: ", totalPrice) + System.lineSeparator();
+		this.totalPrice = String.format(Locale.ROOT, TOTAL_PRICE_FORMAT, "total: ", totalPrice) + System.lineSeparator();
 		return this;
 	}
 
@@ -82,7 +83,7 @@ public class ReceiptBuilderImpl extends AbstractReceiptBuilder {
 	public ReceiptBuilderImpl setDiscountCardsValue(BigDecimal discountCardsValue) {
 		final String DISCOUNT_CARDS_VALUE_FORMAT = "%-8S %78.2f";
 		
-		this.discountCardsValue = String.format(DISCOUNT_CARDS_VALUE_FORMAT, "cards discount value:", discountCardsValue)
+		this.discountCardsValue = String.format(Locale.ROOT, DISCOUNT_CARDS_VALUE_FORMAT, "cards discount value:", discountCardsValue)
 				+ System.lineSeparator();
 		return this;
 	}
@@ -91,7 +92,7 @@ public class ReceiptBuilderImpl extends AbstractReceiptBuilder {
 	public ReceiptBuilderImpl setProductGroupsDiscountValue(BigDecimal productGroupsDiscountValue) {
 		final String PRODUCT_GROUPS_DISCOUNT_FORMAT = "%-8S %72.2f";
 		
-		this.productGroupsDiscountValue = String.format(PRODUCT_GROUPS_DISCOUNT_FORMAT, "discount on product groups:",
+		this.productGroupsDiscountValue = String.format(Locale.ROOT, PRODUCT_GROUPS_DISCOUNT_FORMAT, "discount on product groups:",
 				productGroupsDiscountValue) + System.lineSeparator();
 		return this;
 	}
@@ -100,7 +101,7 @@ public class ReceiptBuilderImpl extends AbstractReceiptBuilder {
 	public ReceiptBuilderImpl setTotalDiscountPrice(BigDecimal totalDiscountPrice) {
 		final String DISCOUNT_TOTAL_PRICE_FORMAT = "%-8S %80.2f";
 		
-		this.totalDiscountPrice = String.format(DISCOUNT_TOTAL_PRICE_FORMAT, "total with discount:", totalDiscountPrice);
+		this.totalDiscountPrice = String.format(Locale.ROOT, DISCOUNT_TOTAL_PRICE_FORMAT, "total with discount:", totalDiscountPrice);
 		return this;
 	}
 }

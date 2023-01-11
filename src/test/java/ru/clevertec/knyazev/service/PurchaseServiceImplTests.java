@@ -1,23 +1,19 @@
 package ru.clevertec.knyazev.service;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import ru.clevertec.knyazev.dto.DiscountCardDTO;
 import ru.clevertec.knyazev.dto.ProductDTO;
 import ru.clevertec.knyazev.entity.Address;
 import ru.clevertec.knyazev.entity.Casher;
@@ -84,25 +80,12 @@ public class PurchaseServiceImplTests {
 			}
 		};
 
-		Set<DiscountCardDTO> discountCardsDtO = new HashSet<>() {
-			private static final long serialVersionUID = 3625295981846758383L;
-
-			{
-				add(new DiscountCardDTO("15fd20186")); // 1%
-				add(new DiscountCardDTO("15fd20187")); // 3% => 4 % => 30.850968
-			}
-		};
-
-		Receipt receipt = purchaseService.buyPurchases(purchase, discountCardsDtO);
-
-		String discountExpected = String.format("%-8S %78.2f", "cards discount value:", 30.85).strip();
-		String realCardsDiscount = receipt.getDiscountCardsValue().strip();
+		Receipt receipt = purchaseService.buyPurchases(purchase);
 		
 		assertAll(() -> {
 			assertNotNull(receipt);
 			assertNotNull(receipt.getCasherIdWithDateTime());
 			assertNotNull(receipt.getShop());
-			assertEquals(discountExpected, realCardsDiscount);
 		});
 	}
 	
@@ -110,30 +93,14 @@ public class PurchaseServiceImplTests {
 	public void whenGetPurchasesOnNullProductDTO() {
 		Map<ProductDTO, BigDecimal> productsDTO = null;
 		
-			Set<DiscountCardDTO> discountCardsDtO = new HashSet<>() {
-			private static final long serialVersionUID = 362526598184918383L;
-
-			{
-				add(new DiscountCardDTO("15fd20187"));
-			}
-		};
-		
-		assertThrows(ServiceException.class, () -> purchaseService.buyPurchases(productsDTO, discountCardsDtO), "ServiceException expected when null productDTO was given.");
+		assertThrows(ServiceException.class, () -> purchaseService.buyPurchases(productsDTO), "ServiceException expected when null productDTO was given.");
 	}
 	
 	@Test
 	public void whenGetPurchasesOnEmptyProductDTO() {
 		Map<ProductDTO, BigDecimal> productsDTO = new HashMap<>();
-		
-			Set<DiscountCardDTO> discountCardsDtO = new HashSet<>() {
-			private static final long serialVersionUID = 362526598184918383L;
-
-			{
-				add(new DiscountCardDTO("15fd20187"));
-			}
-		};
-		
-		assertThrows(ServiceException.class, () -> purchaseService.buyPurchases(productsDTO, discountCardsDtO), "ServiceException expected when null productDTO was given.");
+				
+		assertThrows(ServiceException.class, () -> purchaseService.buyPurchases(productsDTO), "ServiceException expected when null productDTO was given.");
 	}
 	
 }

@@ -20,12 +20,16 @@ import ru.clevertec.knyazev.entity.Address;
 import ru.clevertec.knyazev.entity.Shop;
 import ru.clevertec.knyazev.entity.util.Unit;
 import ru.clevertec.knyazev.service.PurchaseService;
+import ru.clevertec.knyazev.service.discount.DiscountCardService;
+import ru.clevertec.knyazev.service.discount.DiscountProductGroupService;
 import ru.clevertec.knyazev.service.exception.ServiceException;
 import ru.clevertec.knyazev.view.Receipt;
 import ru.clevertec.knyazev.view.ReceiptBuilderImpl;
 
 public class ReceiptControllerTests {
 	private PurchaseService purchaseServiceMock;
+	private DiscountCardService discountCardServiceMock;
+	private DiscountProductGroupService discountProductGroupServiceMock;
 	private ReceiptController receiptController;
 	private Receipt receipt;
 
@@ -35,8 +39,10 @@ public class ReceiptControllerTests {
 
 	@BeforeEach
 	public void setUp() {
+		discountProductGroupServiceMock = Mockito.mock(DiscountProductGroupService.class);
 		purchaseServiceMock = Mockito.mock(PurchaseService.class);
-		receiptController = new ReceiptController(purchaseServiceMock);
+		discountCardServiceMock = Mockito.mock(DiscountCardService.class);
+		receiptController = new ReceiptController(purchaseServiceMock, discountCardServiceMock, discountProductGroupServiceMock);
 		mockMVC = MockMvcBuilders.standaloneSetup(receiptController).defaultRequest(MockMvcRequestBuilders.get("/"))
 				.build();
 
@@ -64,7 +70,7 @@ public class ReceiptControllerTests {
 		final String discountCardParamName = "card";
 		final String discountCardParamValue = "card-123456789";
 
-		Mockito.when(purchaseServiceMock.buyPurchases(Mockito.anyMap(), Mockito.anySet())).thenReturn(receipt);
+		Mockito.when(purchaseServiceMock.buyPurchases(Mockito.anyMap())).thenReturn(receipt);
 
 		MvcResult result = mockMVC.perform(MockMvcRequestBuilders.get(RECEIPT_REQUEST)
 				.param(purchaseParamName, purchaseParamValue).param(discountCardParamName, discountCardParamValue))
@@ -92,7 +98,7 @@ public class ReceiptControllerTests {
 		final String purchaseParamName = "purchase";
 		final String purchaseParamValue = "";
 
-		Mockito.when(purchaseServiceMock.buyPurchases(Mockito.anyMap(), Mockito.anySet())).thenReturn(receipt);
+		Mockito.when(purchaseServiceMock.buyPurchases(Mockito.anyMap())).thenReturn(receipt);
 
 		MvcResult result = mockMVC
 				.perform(MockMvcRequestBuilders.get(RECEIPT_REQUEST).param(purchaseParamName, purchaseParamValue))
@@ -111,7 +117,7 @@ public class ReceiptControllerTests {
 		final String discountCardParamName = "card";
 		final String discountCardParamValue = "card-123456789";
 
-		Mockito.when(purchaseServiceMock.buyPurchases(Mockito.anyMap(), Mockito.anySet())).thenThrow(ServiceException.class);
+		Mockito.when(purchaseServiceMock.buyPurchases(Mockito.anyMap())).thenThrow(ServiceException.class);
 
 		MvcResult result = mockMVC.perform(MockMvcRequestBuilders.get(RECEIPT_REQUEST)
 				.param(purchaseParamName, purchaseParamValue).param(discountCardParamName, discountCardParamValue))

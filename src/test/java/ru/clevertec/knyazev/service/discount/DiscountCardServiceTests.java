@@ -24,7 +24,7 @@ import ru.clevertec.knyazev.entity.util.Unit;
 public class DiscountCardServiceTests {
 	private DiscountCardDAO discountCardDAOMock;
 
-	private DiscountService<DiscountCardDTO, Integer> discountCardService;
+	private DiscountCardService discountCardService;
 
 	private Set<DiscountCardDTO> discountCardsDTO;
 
@@ -42,7 +42,8 @@ public class DiscountCardServiceTests {
 			}
 		};
 
-		discountCardService = new DiscountCardService(discountCardDAOMock, discountCardsDTO);
+		discountCardService = new DiscountCardService(discountCardDAOMock);
+		discountCardService.setDiscountCardsDTO(discountCardsDTO);
 	}
 
 
